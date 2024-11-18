@@ -41,7 +41,7 @@ func LRU(ns NS, k int) {
 	seg := times[len(times)-k]
 
 	for _, node := range ns {
-		if node.LastUseTime >= seg {
+		if node.LastUseTime >= seg || !node.Loaded {
 			continue
 		}
 		node.Unload()
@@ -64,7 +64,7 @@ func LFU(ns NS, k int) {
 	seg := freqs[len(freqs)-k]
 
 	for _, node := range ns {
-		if node.FreqCount.Load() >= seg {
+		if node.FreqCount.Load() >= seg || !node.Loaded {
 			continue
 		}
 		node.Unload()
@@ -87,7 +87,7 @@ func FIFO(ns NS, k int) {
 	seg := times[len(times)-k]
 
 	for _, node := range ns {
-		if node.LoadedTime >= seg {
+		if node.LoadedTime >= seg || !node.Loaded {
 			continue
 		}
 		node.Unload()
